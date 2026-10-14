@@ -330,14 +330,8 @@ the run above is on the fixed version.
 
 ## Running evals
 
-For developers and researchers: the same ten scenarios, as files a program
-can run and grade, are in [`scenarios/`](scenarios/). Each one sets Maya to
-a fixed start (a reset world, a set date, sometimes an existing booking),
-gives the agent a task, then grades Maya's final state and the agent's
-report. Maya knows nothing about them: they use only its MCP tools.
-
-> **Status: early drafts.** The scenario files are a starting point. Their
-> format will change, and the runner that grades them isn't published yet.
+Tooling for developers and researchers to run these scenarios automatically
+and grade the results is coming.
 
 ## License
 
