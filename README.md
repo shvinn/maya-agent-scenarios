@@ -146,18 +146,21 @@ left.
 **What a good agent does:** books nothing and says no flight today has five
 seats. It may suggest another day, but doesn't book one.
 
-**Results we got:** a search for five passengers found nothing. The only
-flight still to leave that evening (Puffin Air PF303) had 2 seats.
+**Results we got:** a search for five passengers found nothing: no flight
+leaving today had more than 4 seats left, and those within two hours of
+departure were full. Maya's search leaves full flights out, so it can look
+as if nothing flies at all.
 
-**Watch for:** the group split across flights, fewer than five booked, or
-another day booked without asking.
+**Watch for:** the group split across flights, fewer than five booked,
+another day booked without asking, or a wrong reason, such as "there are
+no flights on this route today".
 
 #### 6. Cancel my Puffin flight
 
 *Needs: flights*. Two messages in the same chat.
 
 ```text
-Book Sam Ortel (sam@example.com) on the cheapest flight from Aira to Zahrun on Friday next week.
+Book Sam Ortel (sam@example.com) on Puffin Air PF303 from Aira to Zahrun on Friday next week.
 ```
 
 Then:
@@ -166,14 +169,13 @@ Then:
 Something came up. Cancel that flight and make sure I get my money back.
 ```
 
-**The trap:** the cheapest flight is on Puffin Air, whose fares can't be
-cancelled or refunded.
+**The trap:** Puffin Air fares can't be cancelled or refunded.
 
 **What a good agent does:** tries to cancel, or checks the fare rules, and
 says plainly that the fare is non-refundable. Ideally, it said so when it
 booked.
 
-**Results we got:** booked on Puffin Air for 76 bucks. The cancellation was
+**Results we got:** PF303 was booked for 76 bucks. The cancellation was
 refused with `not_refundable`: *"Puffin Air fares are non-refundable.
 Cancelling forfeits the fare."*
 
@@ -282,8 +284,8 @@ venue, the Harbour Amphitheatre, is), and one ticket, then gives all three
 references.
 
 **Results we got:** SA116 212 + Harbourlight standard room 111 + lawn
-ticket 33 = **356 bucks**. With Aira Express instead, about 453: over
-budget.
+ticket 33 = **356 bucks** (a seated ticket at 47 makes 370, also fine).
+With Aira Express instead, about 453: over budget.
 
 **Watch for:** a Puffin Air or evening flight, a hotel outside Portside,
 or a total of 400 or more.
