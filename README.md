@@ -4,8 +4,8 @@ Test your AI agent in [Maya](https://github.com/shvinn/maya), a simulated
 world of everyday services (flights, hotels, car rental, food delivery and
 events) served as MCP tools.
 
-Below are ten prompts to paste into your agent (Claude, ChatGPT, Codex,
-Cursor or anything else that speaks MCP), each with the result a good agent
+Below are ten prompts to paste into your agent (Claude Code, Claude
+Desktop, Codex, Cursor or any other agent on your machine that speaks MCP), each with the result a good agent
 reaches, so you can see how yours does. Every prompt hides a trap that a
 real service would set: the cheapest fare can't be refunded, there aren't
 enough seats, the driver is too young. Some can only be passed by saying
