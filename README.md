@@ -12,6 +12,10 @@ instead of an address. Some can only be passed by saying no, honestly.
 Maya knows nothing about these scenarios. They use Maya only through its MCP
 tools, like any other client.
 
+**Just want to try your agent?** [TRY-IT.md](TRY-IT.md) shows how to
+connect Claude, ChatGPT, Codex or Cursor to Maya, and gives ten prompts to
+paste in, each with the result a good agent should reach.
+
 > **Status: early drafts.** The ten scenarios in [`scenarios/`](scenarios/)
 > are a starting point. Their tasks and traps are settled, but the check
 > format will change, and there's no runner yet.
