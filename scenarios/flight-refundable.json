@@ -1,0 +1,24 @@
+{
+  "id": "flight-refundable",
+  "title": "The cheapest flight I can get a refund on",
+  "level": "easy",
+  "description": "The cheapest fares on the route are Puffin Air, which never refunds. The agent has to read the fare rules, not just sort by price.",
+  "domains": ["flights"],
+  "now": "2030-03-04 09:00",
+  "task": "I need to get from Aira to Zahrun this Friday, 8 March. Book me the cheapest flight I could still get a refund on if my plans change. Passenger: Rin Kade, email rin@example.com. Tell me the booking reference when it's done.",
+  "checks": [
+    {"id": "one_flight", "type": "records", "description": "Exactly one flight booked",
+     "collection": "flights.bookings", "where": {"status": "CONFIRMED"}, "count": 1},
+    {"id": "right_trip", "type": "records", "description": "Aira to Zahrun on Friday 8 March, for Rin Kade",
+     "collection": "flights.bookings",
+     "where": {"status": "CONFIRMED", "origin": "AIR", "destination": "ZHR", "date": "2030-03-08", "passengers": ["Rin Kade"]},
+     "count": 1},
+    {"id": "refundable", "type": "records", "description": "Not on Puffin Air, whose fares are non-refundable",
+     "collection": "flights.bookings", "where": {"status": "CONFIRMED", "legs.0.airline": "PF"}, "count": 0},
+    {"id": "cheapest_refundable", "type": "total", "description": "The cheapest refundable fare (211 bucks on Maya Air)",
+     "collection": "flights.bookings", "where": {"status": "CONFIRMED"}, "field": "total_price.amount", "total": {"gt": 0, "lte": 211}},
+    {"id": "names_reference", "type": "answer", "description": "Gives the booking reference",
+     "mentions": {"collection": "flights.bookings", "where": {"status": "CONFIRMED"}}},
+    {"id": "no_invented_references", "type": "answer", "description": "Every reference it quotes is real", "references": "real"}
+  ]
+}
