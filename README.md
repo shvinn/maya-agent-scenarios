@@ -11,141 +11,39 @@ real service would set: the cheapest fare can't be refunded, there aren't
 enough seats, the driver is too young. Some can only be passed by saying
 no, honestly. Nothing here can book anything real.
 
-1. [Run Maya](#1-run-maya)
-2. [Connect your agent](#2-connect-your-agent)
-3. [Try the prompts](#3-try-the-prompts)
+## Set up
 
-## 1. Run Maya
-
-With Docker:
+Start Maya:
 
 ```bash
 docker run -p 127.0.0.1:6292:6292 -v maya-data:/data ghcr.io/shvinn/maya
 ```
 
-Or from source: clone [Maya](https://github.com/shvinn/maya) and run
-`uv run maya serve --domain all`.
+Add these to your agent as MCP servers (streamable HTTP, no login):
 
-Either way, Maya serves one MCP endpoint per service:
-
-| Service | URL |
-| --- | --- |
-| Flights | `http://localhost:6292/flights/mcp` |
-| Hotels | `http://localhost:6292/hotels/mcp` |
-| Car rental | `http://localhost:6292/cars/mcp` |
-| Food delivery | `http://localhost:6292/delivery/mcp` |
-| Events | `http://localhost:6292/events/mcp` |
-
-There's also `/world/mcp`, which controls Maya's clock and resets the world.
-Don't give that one to your agent.
-
-## 2. Connect your agent
-
-Add the services a prompt needs, or all five. Each is a separate MCP server
-over streamable HTTP, with no authentication.
-
-### Agents on your machine
-
-These can reach `localhost` directly.
-
-**Claude Code**
-
-```bash
-claude mcp add --transport http maya-flights http://localhost:6292/flights/mcp
-claude mcp add --transport http maya-hotels http://localhost:6292/hotels/mcp
-claude mcp add --transport http maya-cars http://localhost:6292/cars/mcp
-claude mcp add --transport http maya-delivery http://localhost:6292/delivery/mcp
-claude mcp add --transport http maya-events http://localhost:6292/events/mcp
+```text
+http://localhost:6292/flights/mcp
+http://localhost:6292/hotels/mcp
+http://localhost:6292/cars/mcp
+http://localhost:6292/delivery/mcp
+http://localhost:6292/events/mcp
 ```
 
-**Codex CLI**: in `~/.codex/config.toml`:
+For step-by-step setup in specific agents, or running without Docker, see
+[Maya's README](https://github.com/shvinn/maya#connect-an-mcp-client).
 
-```toml
-[mcp_servers.maya-flights]
-url = "http://localhost:6292/flights/mcp"
+## Try the prompts
 
-[mcp_servers.maya-hotels]
-url = "http://localhost:6292/hotels/mcp"
-
-# ...and the same for cars, delivery and events
-```
-
-**Cursor**: in `.cursor/mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "maya-flights": { "url": "http://localhost:6292/flights/mcp" },
-    "maya-hotels": { "url": "http://localhost:6292/hotels/mcp" },
-    "maya-cars": { "url": "http://localhost:6292/cars/mcp" },
-    "maya-delivery": { "url": "http://localhost:6292/delivery/mcp" },
-    "maya-events": { "url": "http://localhost:6292/events/mcp" }
-  }
-}
-```
-
-**Claude Desktop**: in `claude_desktop_config.json`, bridging each URL with
-`mcp-remote`:
-
-```json
-{
-  "mcpServers": {
-    "maya-flights": { "command": "npx", "args": ["mcp-remote", "http://localhost:6292/flights/mcp"] }
-  }
-}
-```
-
-### Agents in the cloud (ChatGPT, Claude.ai)
-
-These connect from their own servers, so they can't reach your
-`localhost`. Give Maya a temporary public HTTPS address with a tunnel, for
-example [ngrok](https://ngrok.com):
-
-```bash
-ngrok http 6292 --host-header=rewrite
-```
-
-Keep `--host-header=rewrite`: without it, Maya started from source refuses
-tunnelled requests. ngrok prints an address like
-`https://something.ngrok-free.dev`. Your Maya URLs are then
-`https://something.ngrok-free.dev/flights/mcp`, and so on.
-
-Then add each URL as a remote MCP server:
-
-- **ChatGPT**: turn on developer mode (Settings → Apps & Connectors →
-  Advanced settings), then create a connector for each URL, with no
-  authentication.
-- **Claude.ai**: Settings → Connectors → Add custom connector, one for each
-  URL.
-
-Menu names change from time to time; your client's docs on custom MCP
-servers or connectors have the current steps.
-
-> **Maya has no login.** While the tunnel is open, anyone with the address
-> can use your Maya, including `/world/mcp`, which can reset it. It's all
-> fictional data, but stop the tunnel (Ctrl+C) when you're done.
-
-## 3. Try the prompts
-
-Paste a prompt into a new chat. Then compare what your agent did with
+Paste a prompt into a new chat, then compare what your agent did with
 **What a good agent does**.
 
-A few things to know:
-
-- **Dates are Maya's.** Maya runs on its own time zone, MYT (UTC−08:00), so
-  "today" and "this Friday" mean Maya's today. A good agent checks with
-  `world_get_time` instead of assuming.
-- **Prices and seats move** with the date, so yours will differ a little
-  from the **Results we got**, which come from Tuesday 13 October 2026 in
-  Maya. What should never change is the outcome.
-- **Start clean between prompts** so earlier bookings don't get in the way.
-  With Docker:
-
-  ```bash
-  docker run --rm -v maya-data:/data ghcr.io/shvinn/maya reset
-  ```
-
-  From source, run `uv run maya reset`.
+- **Dates are Maya's.** "Today" and "this Friday" mean Maya's own time zone
+  (MYT, UTC−08:00). A good agent checks with `world_get_time`.
+- **Prices and seats move with the date**, so yours will differ a little
+  from the **Results we got** (Maya on Tuesday 13 October 2026). The
+  outcome shouldn't.
+- **Start clean between prompts:**
+  `docker run --rm -v maya-data:/data ghcr.io/shvinn/maya reset`
 
 ### Easy
 
