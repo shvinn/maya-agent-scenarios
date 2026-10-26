@@ -20,7 +20,15 @@ Start Maya:
 docker run -p 127.0.0.1:6292:6292 -v maya-data:/data ghcr.io/shvinn/maya
 ```
 
-Add these to your agent as MCP servers (streamable HTTP, no login):
+Create a resident, the person your agent books for, and copy the key it
+prints:
+
+```bash
+docker run --rm -v maya-data:/data ghcr.io/shvinn/maya residents create --first-name Alex --last-name Doe --age 30
+```
+
+Add these to your agent as MCP servers (streamable HTTP), each with the
+header `Authorization: Bearer <your key>`:
 
 ```text
 http://localhost:6292/flights/mcp
@@ -45,6 +53,7 @@ Paste a prompt into a new chat, then compare what your agent did with
   outcome shouldn't.
 - **Start clean between prompts:**
   `docker run --rm -v maya-data:/data ghcr.io/shvinn/maya reset`
+  (your resident and key stay).
 
 ### Easy
 
